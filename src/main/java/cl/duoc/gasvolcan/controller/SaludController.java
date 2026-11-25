@@ -1,4 +1,4 @@
-package cl.duoc.ep3.controller;
+package cl.duoc.gasvolcan.controller;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +12,6 @@ import java.util.Map;
 public class SaludController {
     @GetMapping("/salud")
     public Map<String, String> salud() {
-        return Map.of("estado", "ok", "mensaje", "Backend EP3 funcionando");
+        return Map.of("estado", "ok", "mensaje", "Backend Gas El Volcán funcionando");
     }
 }
