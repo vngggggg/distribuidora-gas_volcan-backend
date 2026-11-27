@@ -1,34 +1,57 @@
-# Plantilla de backend para proyecto EP3 — DSY1104
+# Backend - Distribuidora Gas El Volcan
 
-**Es intencionalmente una plantilla, no una solución de la evaluación.** Incluye JDK 21, Spring Boot 4.1.1, Maven Wrapper, H2, Swagger, validación y un endpoint técnico.
+Api Rest con Spring Boot 4.1.1 y java 21
+Base de datos PotgreSQL
+Autenticacion JWT y Roles (ADMIN y Cliente)
 
-## Inicio
-1. Abrir la carpeta en IntelliJ/VS Code.
-2. Ejecutar `./mvnw.cmd spring-boot:run` en PowerShell o `mvnw.cmd spring-boot:run` en CMD.
-3. Abrir `http://localhost:8080/api/salud` (respuesta de prueba).
-4. Abrir `http://localhost:8080/swagger-ui.html`.
-5. Renombrar el nombre de proyecto (pom y properties) y registrar los requisitos reales de EP3 según rúbrica oficial antes de implementar funcionalidades.
+Frontend: https://github.com/vngggggg/distribuidora-gas-volcan.git
 
-## Trabajo del grupo
-- Hacer inventario de páginas y formularios del frontend EP2.
-- Definir entidades, relaciones y validaciones de negocio.
-- Diseñar endpoints y respuestas HTTP antes de conectarlos con React.
-- Separar `controller`, `service`, `repository`, `model`, y `dto` cuando corresponda.
-- Incorporar un módulo a la vez; evitar eliminar de golpe toda la persistencia existente en `localStorage`.
+# Variables de entorno
+Variable - Uso - Valor x defecto
+----------------------
+DB_URL | 
+URL de la base: jdbc:postgresql://localhost:5432/Gasvolcan
+----------------------
+DB_USER | DB_PASSWORD
+Usuario de PostgreSQL: postgres
+Password: (debe definirse)
+----------------------
+JWT_SECRET |
+Clave de firma de JWT (32 caracteres o mas)
+clave de desarrollo local
 
-## Comunicación React-Vite
-El backend escucha en `http://localhost:8080` y la aplicación Vite suele iniciar en `http://localhost:5173`.
-Ejemplo de consumo (en frontend):
-```javascript
-const respuesta = await fetch('http://localhost:8080/api/salud');
-if (!respuesta.ok) throw new Error(`HTTP ${respuesta.status}`);
-const resultado = await respuesta.json();
-console.log(resultado);
-```
+# Como Ejecutar
+Windows (PowerShell), dentro de la carpeta del backend
 
-## Límites de la plantilla
-- `@CrossOrigin` está restringido al origen local Vite para demostración.
-- H2 es temporal y en memoria, NO se diseñó para producción.
-- No incluye autenticación, autorización, dominio ni endpoints de la evaluación; deben implementarse según los requisitos reales y rúbrica EP3.
-- La primera ejecución requiere internet para dependencias y Maven Wrapper.
-- Verificar arranque y Swagger en un PC de laboratorio: no fue posible descargar dependencias Maven en el entorno de generación.
+| $env:DB_PASSWORD="su_contraseña"
+    .\mvnw.cmd spring-boot:run |
+
+Si mvnw.cmd falla en Windows, usar el comando equivalente:
+
+    java "-Dmaven.multiModuleProjectDirectory=$PWD" -classpath ".mvn\wrapper\maven-wrapper.jar" org.apache.maven.wrapper.MavenWrapperMain spring-boot:run
+
+Linux / macOS:
+
+    export DB_PASSWORD="su_contraseña"
+    ./mvnw spring-boot:run
+
+Está listo cuando aparece `Started GasVolcanApplication` (puerto 8080). Swagger: http://localhost:8080/swagger-ui.html
+
+
+# Usuarios de demostracion (se crean al iniciar)
+
+| Usuario | Contraseña | Rol 
+------------------------------
+| admin | Admin123! | ADMIN
+| cliente | Cliente123! | CLIENTE
+
+!La creacion de los productos se realiza desde el panel admin del frontend o desde Swagger con el token de admin¡
+
+# Seguridad
+- Contraseña guardada con BCrypt.
+- JWT firmado, con vencimiento de 60 min.
+- 401 sin token valido y 403 cuando el rol esta sin permiso.
+- CORS permitido solo para http://localhost:5173
+
+# Regla de negocio
+Un pedido no puede superar el stock disponible (responde con 409). Al confirmarse, el stock del producto se descuenta.
