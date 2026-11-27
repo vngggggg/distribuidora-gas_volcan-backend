@@ -10,10 +10,10 @@
         <relativePath/>
     </parent>
     <groupId>cl.duoc</groupId>
-    <artifactId>backend-ep3</artifactId>
+    <artifactId>backend-gasvolcan</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>backend-ep3</name>
-    <description>Taller DSY1104 semana 12 - API REST</description>
+    <name>backend-gasvolcan</name>
+    <description>API REST Distribuidora de Gas El Volcan</description>
     <properties>
         <java.version>21</java.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
